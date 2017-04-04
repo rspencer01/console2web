@@ -1,0 +1,42 @@
+$def with (session, title)
+<html>
+  <head>
+    <script type = "text/javascript"
+      src = "/js"></script>
+    <script type = "text/javascript" language = "javascript">
+      $$(document).ready(function() {
+          $$("#submit").click(function(event){
+            $$.post("/reply",{'response':$$("#response").val()}, function( r ) {
+              $$("#conversation").append(
+                "<div>"+r+"</div>");
+              });
+            });
+            $$("#response").val("");
+            $$("#kill").click(function(event){
+              $$.post("/kill", function( r ) {
+                location.reload();
+                });
+              });
+            $$.post("/reply",{'response':''}, function( r ) {
+              $$("#conversation").append(
+                "<div>"+r+"</div>");
+              });
+          });
+    </script>
+  </head>
+  <body>
+    <h1>${title}</h1>
+    <div>
+      Welcome.  You are user ${session.id}.
+    </div>
+    <div id='conversation' style='padding:10px; background:#050505;font-family:monospace;font-size:14px;'>
+    </div>
+    <div style='display:flex;'>
+      <input type='text' id='response' style='flex:1;'/>
+      <button id='submit' style='flex:0;'>Submit</button>
+    </div>
+    <div>
+      <button id='kill'>Restart</button>
+    </div>
+  </body>
+</html>
