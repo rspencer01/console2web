@@ -6,7 +6,7 @@ $def with (session, title)
     <script type = "text/javascript" language = "javascript">
       $$(document).ready(function() {
           $$("#submit").click(function(event){
-            $$.post("/reply",{'response':$$("#response").val()}, function( r ) {
+            $$.post("/reply",{'response':$$("#response").val()+'\n'}, function( r ) {
               $$("#conversation").append(
                 "<div>"+r+"</div>");
               });
