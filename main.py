@@ -109,7 +109,14 @@ class reply:
 
 class favicon:
   def GET(self):
-    return open(args.favicon).read()
+    ext = args.favicon[-3:]
+    cType = {
+      "png":"images/png",
+      "jpg":"images/jpeg",
+      "gif":"images/gif",
+      "ico":"images/x-icon"}
+    web.header("Content-Type", cType[ext]) # Set the Header
+    return open(args.favicon,'rb').read()
 
 class kill:
   def POST(self):
