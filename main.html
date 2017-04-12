@@ -1,6 +1,7 @@
 $def with (session, title, readme, cmd)
 <html>
   <head>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon" />
     <script type = "text/javascript"
       src = "/js"></script>
     <script type = "text/javascript" language = "javascript">
@@ -26,7 +27,7 @@ $def with (session, title, readme, cmd)
   </head>
   <body style="margin:0;">
     <div style="margin-left:100px;margin-right:100px;">
-      <h1>${title}<span style="color:#666;margin-left:10pt;">${cmd}</span></h1>
+      <h1><img src="/favicon" style="height:80px;vertical-align:middle;margin-right:10px;">${title}<span style="color:#666;margin-left:10pt;">${cmd}</span></h1>
       <div>
         Welcome.  You are user ${session.id}.
         $if readme:

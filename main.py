@@ -12,6 +12,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('cmd')
 parser.add_argument('--title', '-t', required=False, default=None)
 parser.add_argument('--readme', '-r', required=False, default=None)
+parser.add_argument('--favicon', '-i', required=False, default=None)
 
 args = parser.parse_args()
 
@@ -22,6 +23,12 @@ if not args.readme:
   args.readme = os.path.dirname(args.cmd.split()[0])+"/README.md"
   if not os.path.exists(args.readme):
     args.readme = None
+
+if not args.favicon:
+  args.favicon = os.path.dirname(args.cmd.split()[0])+"/favicon.png"
+  if not os.path.exists(args.favicon):
+    args.favicon = None
+
 sys.argv = ['', '8080']
 import web
 web.config.debug = False
@@ -75,6 +82,7 @@ urls = (
        '/js', 'js',
        '/kill', 'kill',
        '/readme', 'Readme',
+       '/favicon', 'favicon',
        )
 app = web.application(urls, globals())
 session = web.session.Session(app, web.session.DiskStore('sessions'), initializer={'id': None})
@@ -98,6 +106,10 @@ class reply:
     time.sleep(1)
     rep = gamestate.getNext()
     return rep
+
+class favicon:
+  def GET(self):
+    return open(args.favicon).read()
 
 class kill:
   def POST(self):
