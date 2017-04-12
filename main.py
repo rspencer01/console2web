@@ -4,17 +4,25 @@ import time
 import os
 import argparse
 import subprocess
+import markdown
 from HtmlPipe import HtmlPipe
 
 parser = argparse.ArgumentParser()
 parser.add_argument('cmd')
 parser.add_argument('--title', '-t', required=False, default=None)
+parser.add_argument('--readme', '-r', required=False, default=None)
 
 args = parser.parse_args()
 
 if not args.title:
   args.title = args.cmd.split()[0]
 
+if not args.readme:
+  args.readme = os.path.dirname(args.cmd.split()[0])+"/README.md"
+  print args
+  if not os.path.exists(args.readme):
+    args.readme = None
+print args
 sys.argv = ['', '8080']
 import web
 web.config.debug = False
@@ -52,6 +60,13 @@ class Gamestate(object):
     os.remove(self.stdout_filename)
     os.remove(self.stdin_filename)
 
+class Readme:
+  def GET(self):
+    print args
+    if args.readme is None:
+      return "This project has no README.md"
+    md = open(args.readme).read()
+    return render.readme(markdown.markdown(md))
 
 gamestates = {}
 
@@ -60,6 +75,7 @@ urls = (
        '/reply', 'reply',
        '/js', 'js',
        '/kill', 'kill',
+       '/readme', 'Readme',
        )
 app = web.application(urls, globals())
 session = web.session.Session(app, web.session.DiskStore('sessions'), initializer={'id': None})
@@ -70,7 +86,7 @@ class index:
     if session.id is None:
       session.id = random.randint(0,1000000)
       gamestates[session.id] = Gamestate(session.id)
-    return render.main(session, args.title)
+    return render.main(session, args.title, args.readme)
 
 class reply:
   def POST(self):
