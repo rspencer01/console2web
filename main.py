@@ -19,10 +19,8 @@ if not args.title:
 
 if not args.readme:
   args.readme = os.path.dirname(args.cmd.split()[0])+"/README.md"
-  print args
   if not os.path.exists(args.readme):
     args.readme = None
-print args
 sys.argv = ['', '8080']
 import web
 web.config.debug = False
@@ -86,7 +84,7 @@ class index:
     if session.id is None:
       session.id = random.randint(0,1000000)
       gamestates[session.id] = Gamestate(session.id)
-    return render.main(session, args.title, args.readme)
+    return render.main(session, args.title, args.readme, args.cmd)
 
 class reply:
   def POST(self):
