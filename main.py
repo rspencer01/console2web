@@ -5,6 +5,7 @@ import os
 import argparse
 import subprocess
 import markdown
+import tempfile
 from HtmlPipe import HtmlPipe
 
 parser = argparse.ArgumentParser()
@@ -27,8 +28,9 @@ web.config.debug = False
 
 class Gamestate(object):
   def __init__(self,sessionid):
-    self.stdout_filename = str(sessionid) + '.stdout'
-    self.stdin_filename = str(sessionid) + '.stdin'
+    directory = tempfile.mkdtemp()
+    self.stdout_filename = os.path.join(directory, str(sessionid) + '.stdout')
+    self.stdin_filename = os.path.join(directory, str(sessionid) + '.stdin')
     os.mkfifo(self.stdout_filename)
     os.mkfifo(self.stdin_filename)
 
@@ -60,7 +62,6 @@ class Gamestate(object):
 
 class Readme:
   def GET(self):
-    print args
     if args.readme is None:
       return "This project has no README.md"
     md = open(args.readme).read()
